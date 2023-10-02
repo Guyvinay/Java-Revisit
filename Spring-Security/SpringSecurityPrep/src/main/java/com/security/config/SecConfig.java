@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,6 +17,9 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import com.security.jwt.JwtTokenGeneratorFilter;
+import com.security.jwt.JwtTokenValidatorFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,6 +33,10 @@ public class SecConfig {
 
     	
 		http
+		.sessionManagement(sessionManagement->
+		       sessionManagement
+		       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				)
 		.cors(cors->{
 			cors.configurationSource(new CorsConfigurationSource() {
 				
@@ -64,10 +72,12 @@ public class SecConfig {
 //		           .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //		           )
 //		.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-		.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
+//		.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
 //		.addFilterAfter(new AuthoritiesLogginAfterFilter(), BasicAuthenticationFilter.class)
-		.addFilterAfter(new CustomOncePerRequestFilter(), BasicAuthenticationFilter.class)
+//		.addFilterAfter(new CustomOncePerRequestFilter(), BasicAuthenticationFilter.class)
 //		.addFilterAt(new LoggingFilterAt(), BasicAuthenticationFilter.class)
+		.addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
+		.addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
 		.formLogin(Customizer.withDefaults())
 		.httpBasic(Customizer.withDefaults());
 		
