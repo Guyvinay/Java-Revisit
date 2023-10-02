@@ -64,7 +64,10 @@ public class SecConfig {
 //		           .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //		           )
 //		.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-		.addFilterAfter(new RequestValidationFilter(), BasicAuthenticationFilter.class)
+		.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
+//		.addFilterAfter(new AuthoritiesLogginAfterFilter(), BasicAuthenticationFilter.class)
+		.addFilterAfter(new CustomOncePerRequestFilter(), BasicAuthenticationFilter.class)
+//		.addFilterAt(new LoggingFilterAt(), BasicAuthenticationFilter.class)
 		.formLogin(Customizer.withDefaults())
 		.httpBasic(Customizer.withDefaults());
 		
