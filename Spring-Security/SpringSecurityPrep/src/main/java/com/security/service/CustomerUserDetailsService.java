@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.security.entity.Customer;
 import com.security.repository.CustomerRepository;
 
-@Service
+//@Service
 public class CustomerUserDetailsService implements UserDetailsService {
 
 	@Autowired

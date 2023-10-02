@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.security.entity.Authority;
 import com.security.entity.Customer;
 import com.security.exception.CustomerException;
 import com.security.repository.CustomerRepository;
@@ -18,7 +19,10 @@ public class CustomerServiceImpl  implements CustomerService{
 	
 	@Override
 	public Customer registerCustomer(Customer customer) throws CustomerException {
-		
+		List<Authority> list = customer.getAuthorities();
+		for(Authority auth:list) {
+			auth.setCustomer(customer);
+		}
 		return customerRepository.save(customer);
 		
 		
@@ -27,7 +31,10 @@ public class CustomerServiceImpl  implements CustomerService{
 	@Override
 	public Customer getCustomerDetailsByEmail(String email)throws CustomerException {
 		
-		return customerRepository.findByEmail(email).orElseThrow(() -> new CustomerException("Customer Not found with Email: "+email));
+		 Customer customer = customerRepository.findByEmail(email).orElseThrow(
+				 () -> new CustomerException("Customer Not found with Email: "+email)
+				 );
+		 return customer;
 	}
 
 	@Override
