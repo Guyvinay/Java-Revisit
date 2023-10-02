@@ -55,15 +55,16 @@ public class SecConfig {
 			.requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll()
 			.anyRequest().authenticated();
 		})
-//		.csrf(csrf->csrf.disable())
+		.csrf(csrf->csrf.disable())
 //		.csrf(csrf->csrf.ignoringRequestMatchers("/contact","/notice"))
-		.csrf(csrf->
-		           csrf
-		           .csrfTokenRequestHandler(requestHandler)
-		           .ignoringRequestMatchers("/contact","/notice","/customers")
-		           .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		           )
-		.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+//		.csrf(csrf->
+//		           csrf
+//		           .csrfTokenRequestHandler(requestHandler)
+//		           .ignoringRequestMatchers("/contact","/notice","/customers")
+//		           .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//		           )
+//		.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+		.addFilterAfter(new RequestValidationFilter(), BasicAuthenticationFilter.class)
 		.formLogin(Customizer.withDefaults())
 		.httpBasic(Customizer.withDefaults());
 		
