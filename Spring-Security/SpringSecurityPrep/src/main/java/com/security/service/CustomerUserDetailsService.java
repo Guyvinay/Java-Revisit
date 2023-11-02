@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.security.entity.Customer;
 import com.security.repository.CustomerRepository;
 
-//@Service
+@Service
 public class CustomerUserDetailsService implements UserDetailsService {
 
 	@Autowired
@@ -34,8 +34,9 @@ public class CustomerUserDetailsService implements UserDetailsService {
 			Customer customer = optional.get();
 			
 			List<GrantedAuthority> grantedAuth = new ArrayList<>();
-//			grantedAuth.add(new SimpleGrantedAuthority(username));
 			
+			grantedAuth.add(new SimpleGrantedAuthority(customer.getRole()));
+			System.out.println("Hii");
 			return new User(customer.getEmail(),customer.getPassword(),grantedAuth);
 //			return new CustomerUserDetails(customer);
 		}else {

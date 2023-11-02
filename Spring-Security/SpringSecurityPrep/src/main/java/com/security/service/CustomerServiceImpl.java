@@ -23,9 +23,8 @@ public class CustomerServiceImpl  implements CustomerService{
 		for(Authority auth:list) {
 			auth.setCustomer(customer);
 		}
+		customer.setRole("ROLE_"+customer.getRole().toUpperCase());
 		return customerRepository.save(customer);
-		
-		
 	}
 
 	@Override

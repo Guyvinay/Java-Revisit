@@ -21,8 +21,8 @@ import com.security.repository.CustomerRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Slf4j
+//@Component
+//@Slf4j
 public class MyAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
@@ -41,9 +41,9 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 		if( optional.isPresent() ) {
 			Customer customer = optional.get();
 			if(passwordEncoder.matches(passWord, customer.getPassword())){
-				log.info("Inside My Provider Manager, Validated Creds.");
+//				log.info("Inside My Provider Manager, Validated Creds.");
 				List<GrantedAuthority> auth = new ArrayList<>();
-				List<Authority> authorities = customer.getAuthorities();
+//				List<Authority> authorities = customer.getAuthorities();
 //				for(Authority au:authorities) {
 //					auth.add(new SimpleGrantedAuthority(au.getName()));
 //				}

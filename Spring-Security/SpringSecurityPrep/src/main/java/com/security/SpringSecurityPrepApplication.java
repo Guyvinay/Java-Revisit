@@ -26,7 +26,7 @@ servers = {
 @SecurityScheme(name = "basicAuth", type = SecuritySchemeType.HTTP, scheme = "basic"),
 @SecurityScheme(name = "bearerToken", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 })
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
 public class SpringSecurityPrepApplication {
 
 	public static void main(String[] args) {

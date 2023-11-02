@@ -2,9 +2,13 @@ package com.security.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.entity.Customer;
+import com.security.entity.LoginCreds;
 import com.security.service.CustomerService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j
 public class CustomerController {
 
 	@Autowired
@@ -29,6 +33,10 @@ public class CustomerController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	Logger log = LoggerFactory.getLogger(CustomerController.class);
 	
 	@GetMapping("/hello")
 	public String testHandler() {
@@ -84,10 +92,24 @@ public class CustomerController {
 	public ResponseEntity<String> getLoggedInCustomerDetailsHandler(Authentication auth){
 //		System.out.println("Hii");
 //		System.out.println(auth.getPrincipal()); // this Authentication object having Principle object details
-		log.info("Inside Sign-in route");
+//		log.info("Inside Sign-in route");
 		 Customer customer= customerService.getCustomerDetailsByEmail(auth.getName());
 		 
 		 return new ResponseEntity<>(customer.getName()+" Logged In Successfully", HttpStatus.ACCEPTED);	
 	}
 	
+	@PostMapping("/signIn")
+	public ResponseEntity<LoginCreds> loginCustomerByPost(@RequestBody LoginCreds loginCreds ){
+//		
+		log.info("getting Login Details"+loginCreds);
+		
+		Authentication authenticate = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginCreds.getUsername(), loginCreds.getPassword())
+				);
+		log.info("getting Login Details"+authenticate);
+
+		 Customer customer= customerService.getCustomerDetailsByEmail(authenticate.getName());
+		 log.info("getting Login Details "+customer);
+		 return new ResponseEntity<LoginCreds>(loginCreds, HttpStatus.ACCEPTED);	
+	}
 }
